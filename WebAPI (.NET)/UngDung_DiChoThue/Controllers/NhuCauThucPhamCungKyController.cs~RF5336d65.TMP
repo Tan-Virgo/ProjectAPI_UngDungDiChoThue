@@ -1,0 +1,150 @@
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+
+namespace UngDung_DiChoThue.Controllers
+{
+    public class NhuCauThucPhamCungKyController : ApiController
+    {
+        SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=QL_DiChoThue;Integrated Security=True");
+
+        // Lấy thống kê tất cả nhu cầu thực phẩm từ trước đến nay
+        //GET api/NhuCauThucPhamCungKy
+        [Route("api/NhuCauThucPhamCungKy/{type}")]
+        public string Get(string type)
+        {
+            if (type == "All")
+            {
+                string query = @"SELECT V.Nam, V.Quy, V.Thang, V.TenSP, V.TenNCC, sum(V.SLBanRa) AS 'SLBanRa'
+                                    FROM V_ThongKe_NhuCau_CungKy V
+                                    GROUP BY V.MaSP, V.TenSP, V.TenNCC, V.Nam, V.Quy, V.Thang";
+                SqlDataAdapter da = new SqlDataAdapter(query, con);
+
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                if (dt.Rows.Count > 0)
+                {
+                    return JsonConvert.SerializeObject(dt);
+                }
+                else
+                {
+                    return "No data found";
+                }
+            }
+            else // have Filter -> ko lọc thêm NCC
+            {
+                string query = @"SELECT V.Nam, V.Quy, V.Thang, V.TenSP, sum(V.SLBanRa) AS 'SLBanRa'
+                                    FROM V_ThongKe_NhuCau_CungKy V
+                                    GROUP BY V.MaSP, V.TenSP, V.Nam, V.Quy, V.Thang";
+                SqlDataAdapter da = new SqlDataAdapter(query, con);
+
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                if (dt.Rows.Count > 0)
+                {
+                    return JsonConvert.SerializeObject(dt);
+                }
+                else
+                {
+                    return "No data found";
+                }
+            }
+        }
+
+
+
+
+
+
+        /// <summary>
+        /// ////////////////////////
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="choice"></param>
+        /// <returns></returns>
+
+
+
+
+
+
+        // Lấy thống kê nhu cầu thực phẩm trong năm (bao gồm NCC)
+        //GET api/NhuCauThucPhamCungKy/[Nam]
+        [Route("api/NhuCauThucPhamCungKy/{type}/{choice}")]
+        public string Get(string type, string choice)
+        {
+            if (type == "All" && choice == "Year")
+            {
+                string query = @"SELECT * FROM V_ThongKe_NhuCau_CungKy WHERE Nam = '" + year + "'";
+
+                SqlDataAdapter da = new SqlDataAdapter(query, con);
+
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                if (dt.Rows.Count > 0)
+                {
+                    return JsonConvert.SerializeObject(dt);
+                }
+                else
+                {
+                    return "No data found";
+                }
+            }
+            else
+            {
+                string query = @"SELECT V.Nam, V.Quy, V.Thang,
+                                    V.MaSP, V.TenSP, sum(V.SLBanRa) AS 'SLBanRa'
+                                    FROM V_ThongKe_NhuCau_CungKy V " + 
+                                    "WHERE Nam = '" + year + "'" +
+                                    "GROUP BY v.MaSP, v.TenSP, v.Nam, v.Quy, v.Thang";
+
+                SqlDataAdapter da = new SqlDataAdapter(query, con);
+
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                if (dt.Rows.Count > 0)
+                {
+                    return JsonConvert.SerializeObject(dt);
+                }
+                else
+                {
+                    return "No data found";
+                }
+            }
+
+        }
+
+        // Thống kê nhu cầu thực phẩm 
+        //GET api/NhuCauThucPhamCungKy/[Nam]/[Quy]
+        [Route("api/NhuCauThucPhamCungKy/{year}/{quarter}")]
+        public string Get(int year, int quarter)  
+        {
+            string query = @"SELECT * FROM V_ThongKe_NhuCau_CungKy WHERE Nam = '" + year + "' AND Quy = '" + quarter + "'";
+
+            SqlDataAdapter da = new SqlDataAdapter(query, con);
+
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            if (dt.Rows.Count > 0)
+            {
+                return JsonConvert.SerializeObject(dt);
+            }
+            else
+            {
+                return "No data found";
+            }
+
+        }
+    }
+}
