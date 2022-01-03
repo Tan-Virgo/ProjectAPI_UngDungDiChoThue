@@ -10,8 +10,6 @@ import com.fit.hcmus.WebAPI.Model.DonHang;
 
 public interface DonHangRepository extends JpaRepository<DonHang, Integer> 
 {
-	//List<DonHang> findByMaKHAndTrangThai(int makh, String trangthai);
-	
 	@Query("SELECT v FROM V_DonHang v")
-    List<DonHang> findByMaKHAndTrangThai(@Param("makh") Integer makh, @Param("trangthai") String trangthai);
+    List<DonHang> findByMaKH(@Param("makh") Integer makh);
 }

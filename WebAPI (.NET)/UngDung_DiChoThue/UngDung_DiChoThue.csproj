@@ -46,6 +46,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -158,7 +159,9 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoaiSanPhamController.cs" />
     <Compile Include="Controllers\MatHangThietYeuController.cs" />
+    <Compile Include="Controllers\NhaCungCapController.cs" />
     <Compile Include="Controllers\NhuCauThucPhamCungKyController.cs" />
+    <Compile Include="Controllers\SanPhamController.cs" />
     <Compile Include="Controllers\ThuNhapDVVCController.cs" />
     <Compile Include="Controllers\ThuNhapNCCController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />

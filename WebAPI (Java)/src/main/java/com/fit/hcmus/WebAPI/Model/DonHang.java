@@ -28,56 +28,60 @@ public class DonHang
 	@Column(name="trangthai")
 	private String trangThai;
 	
-	@Column(name="makh")
-	private int maKH;
-	
 	@Column(name="hinhthucthanhtoan")
 	private String hinhThucThanhToan;
-	
-	@Column(name="madvvc")
-	private int maDVVC;
-	
+
 	@Column(name="phivanchuyen")
 	private float phiVanChuyen;
 	
-	@Column(name="tendvvc")
-	private String tenDVVC;
+	@Column(name="makh")
+	private int maKH;
 	
 	@Column(name="tenkh")
 	private String tenKH;
 	
+	@Column(name="mashipper")
+	private int maShipper;
+	
+	@Column(name="tenshipper")
+	private String tenShipper;
+	
+
 	public DonHang() 
 	{ 
 		
 	}
 	
 	public DonHang(int madh, String ngaylap, float tongtien, String trangthai, 
-			int makh, String hinhthucthanhtoan, int madvvc, float phivanchuyen, String tendvvc, String tenkh) 
+			String hinhthucthanhtoan, float phivanchuyen, 
+			int makh, String tenkh, int mashipper, String tenshipper) 
 	{
 		this.maDH = madh;
 		this.ngayLap = ngaylap;
 		this.tongTien = tongtien;
 		this.trangThai = trangthai;
-		this.maKH = makh;
 		this.hinhThucThanhToan = hinhthucthanhtoan;
-		this.maDVVC = madvvc;
 		this.phiVanChuyen = phivanchuyen;
-		this.tenDVVC = tendvvc;
+		this.maKH = makh;
 		this.tenKH = tenkh;
+		this.maShipper = mashipper;
+		this.tenShipper = tenshipper;
 	}
 	
 	public DonHang(String ngaylap, float tongtien, String trangthai, 
-			int makh, String hinhthucthanhtoan, int madvvc, float phivanchuyen, String tendvvc, String tenkh) 
+			String hinhthucthanhtoan, float phivanchuyen, 
+			int makh, String tenkh, int mashipper, String tenshipper) 
 	{
 		this.ngayLap = ngaylap;
 		this.tongTien = tongtien;
 		this.trangThai = trangthai;
 		this.maKH = makh;
 		this.hinhThucThanhToan = hinhthucthanhtoan;
-		this.maDVVC = madvvc;
 		this.phiVanChuyen = phivanchuyen;
-		this.tenDVVC = tendvvc;
+		this.maKH = makh;
 		this.tenKH = tenkh;
+		this.maShipper = mashipper;
+		this.tenShipper = tenshipper;
 	}
 	
 	public int getMaDH()
@@ -120,16 +124,6 @@ public class DonHang
 		this.trangThai = trangthai;
 	}
 
-	public int getMaKH()
-	{
-		return maKH;
-	}
-	
-	public void setMaKH(int makh)
-	{
-		this.maKH = makh;
-	}
-	
 	public String getHinhThucThanhToan()
 	{
 		return hinhThucThanhToan;
@@ -138,16 +132,6 @@ public class DonHang
 	public void setHinhThucThanhToan(String hinhthucthanhtoan)
 	{
 		this.hinhThucThanhToan = hinhthucthanhtoan;
-	}
-	
-	public int getMaDVVC()
-	{
-		return maDVVC;
-	}
-	
-	public void setMaDVVC(int madvvc)
-	{
-		this.maDVVC = madvvc;
 	}
 	
 	public float getPhiVanChuyen()
@@ -160,15 +144,16 @@ public class DonHang
 		this.phiVanChuyen = phivanchuyen;
 	}
 	
-	public String getTenDVVC()
+	public int getMaKH()
 	{
-		return tenDVVC;
+		return maKH;
 	}
 	
-	public void setTenDVVC(String tendvvc)
+	public void setMaKH(int makh)
 	{
-		this.tenDVVC = tendvvc;
+		this.maKH = makh;
 	}
+	
 	public String getTenKH()
 	{
 		return tenKH;
@@ -179,6 +164,26 @@ public class DonHang
 		this.tenKH = tenkh;
 	}
 	
+	public int getMaShipper()
+	{
+		return maShipper;
+	}
+	
+	public void setMaShipper(int mashipper)
+	{
+		this.maShipper = mashipper;
+	}
+	
+	public String getTenShipper()
+	{
+		return tenShipper;
+	}
+	
+	public void setTenShipper(String tenshipper)
+	{
+		this.tenShipper = tenshipper;
+	}
+	
 	@Override
 	public String toString() {
 		return "DonHang [maDH = " + maDH + 
@@ -187,10 +192,11 @@ public class DonHang
 				", trangThai=" + trangThai + 
 				", maKH=" + maKH +
 				", hinhThucThanhToan=" + hinhThucThanhToan + 
-				", maDVVC=" + maDVVC +
 				", phiVanChuyen=" + phiVanChuyen +
-				", tenDVVC=" + tenDVVC + 
-				", tenKH=" + tenKH + "]";
+				",  maKH=" + maKH +
+				", tenKH=" + tenKH +
+				", maShipper="+ maShipper + 
+				", tenShipper=" + tenShipper +"]";
 	}
 	
 

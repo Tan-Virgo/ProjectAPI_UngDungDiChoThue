@@ -14,7 +14,7 @@ namespace UngDung_DiChoThue.Controllers
     {
         SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=QL_DiChoThue;Integrated Security=True");
 
-        // Doanh thu NCC theo các năm
+        // Doanh thu NCC theo các năm hoặc quý hoặc tháng
         //GET api/ThuNhapNCC/[MaNCC]
         [Route("api/ThuNhapNCC/{MaNCC}")]
         public HttpResponseMessage Get(int MaNCC)
@@ -27,46 +27,77 @@ namespace UngDung_DiChoThue.Controllers
             return GetData(query);
         }
 
-        // Doanh thu NCC của các quý trong năm
-        //GET api/ThuNhapNCC/[MaNCC]/[year]
-        [Route("api/ThuNhapNCC/{MaNCC}/{year}")]
-        public HttpResponseMessage Get(int MaNCC, int year)
+
+        //GET api/ThuNhapNCC/[MaNCC]/[type]/[value]
+        [Route("api/ThuNhapNCC/{MaNCC}/{type}/{value}")]
+        public HttpResponseMessage Get(int MaNCC, string type, int value)
         {
-            string query = @"
+            string query = @"";
+
+            // Doanh thu tất cả các quý trong năm
+            if (type == "ChooseYearAllQuarter")
+            {
+                query = @"
                         SELECT V.Quy, v.TenNCC, SUM(V.DoanhThu) AS 'TongDoanhThu'
                         FROM V_ThongKe_ThuNhap_NCC V
-                        WHERE V.MaNCC = '" + MaNCC + "' AND V.Nam = '" + year + "' " +
+                        WHERE V.MaNCC = '" + MaNCC + "' AND V.Nam = '" + value + "' " +
                         "GROUP BY V.Quy, V.MaNCC, v.TenNCC";
+            }
+            // Doanh thu tất cả các tháng trong năm
+            else if (type == "ChooseYearAllMonth")
+            {
+                query = @"
+                        SELECT V.Thang, v.TenNCC, SUM(V.DoanhThu) AS 'TongDoanhThu'
+                        FROM V_ThongKe_ThuNhap_NCC V
+                        WHERE V.MaNCC = '" + MaNCC + "' AND V.Nam = '" + value + "' " +
+                        "GROUP BY V.Thang, V.MaNCC, v.TenNCC";
+            }
+            // Doanh thu tất cả các năm theo quý
+            else if (type == "ChooseQuarterAllYear")
+            {
+                query = @"
+                        SELECT V.Nam, v.TenNCC, SUM(V.DoanhThu) AS 'TongDoanhThu'
+                        FROM V_ThongKe_ThuNhap_NCC V
+                        WHERE V.MaNCC = '" + MaNCC + "' AND V.Quy = '" + value + "' " +
+                        "GROUP BY V.Nam, V.MaNCC, v.TenNCC";
+            }
+            // Doanh thu tất cả các năm theo tháng
+            else if (type == "ChooseMonthAllYear")
+            {
+                query = @"
+                        SELECT V.Nam, v.TenNCC, SUM(V.DoanhThu) AS 'TongDoanhThu'
+                        FROM V_ThongKe_ThuNhap_NCC V
+                        WHERE V.MaNCC = '" + MaNCC + "' AND V.Thang = '" + value + "' " +
+                     "GROUP BY V.Nam, V.MaNCC, v.TenNCC";
+            }
+            else
+                query = "";
+            
+
             return GetData(query);
         }
 
-        // Doanh thu NCC của các tháng trong quý trong năm
-        //GET api/ThuNhapNCC/[MaNCC]/[year]/[quarter]
-        [Route("api/ThuNhapNCC/{MaNCC}/{year}/{quarter}")]
-        public HttpResponseMessage Get(int MaNCC, int year, int quarter)
+
+        [Route("api/ThuNhapNCC_Year")]
+        public HttpResponseMessage Get()
         {
             string query = @"
-                        SELECT V.Thang, V.TenNCC, SUM(V.DoanhThu) AS 'TongDoanhThu'
-                        FROM V_ThongKe_ThuNhap_NCC V
-                        WHERE V.MaNCC = '" + MaNCC + "' AND V.Nam = '" + year + "' " +
-                        " AND V.Quy = '" + quarter + "' " +
-                        "GROUP BY V.Thang, V.MaNCC, v.TenNCC";
+                        SELECT DISTINCT V.Nam
+                        FROM V_ThongKe_ThuNhap_NCC V";
             return GetData(query);
         }
 
-        // Doanh thu NCC của các tháng trong quý trong năm
-        //GET api/ThuNhapNCC/[MaNCC]/[year]/[quarter]/[month]
-        [Route("api/ThuNhapNCC/{MaNCC}/{year}/{quarter}/{month}")]
-        public HttpResponseMessage Get(int MaNCC, int year, int quarter, int month)
+        [Route("api/ThuNhapNCC/{type}/{MaNCC}")]
+        public HttpResponseMessage Get(string type, int MaNCC)
         {
             string query = @"
-                        SELECT V.Thang, V.TenNCC, SUM(V.DoanhThu) AS 'TongDoanhThu'
+                        SELECT DISTINCT V.Thang, SUM(V.DoanhThu) as 'TongDoanhThu'
                         FROM V_ThongKe_ThuNhap_NCC V
-                        WHERE V.MaNCC = '" + MaNCC + "' AND V.Nam = '" + year + "' " +
-                        " AND V.Quy = '" + quarter + "' AND V.Thang = '" + month + "' " + 
-                        "GROUP BY V.Thang, V.MaNCC, v.TenNCC";
+                        WHERE MaNCC = '" + MaNCC + "' AND V.Nam = YEAR(GETDATE()) " +
+                        "GROUP BY V.Thang ORDER BY V.Thang";
             return GetData(query);
         }
+
 
         public HttpResponseMessage GetData(string query)
         {
