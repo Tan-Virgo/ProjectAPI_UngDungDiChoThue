@@ -20,7 +20,7 @@ namespace UngDung_DiChoThue.Controllers
         //GET api/MatHangThietYeu
         public HttpResponseMessage Get()
         {
-            string query = @"SELECT * FROM V_ThongKe_MatHangThietYeu";
+            string query = @"SELECT * FROM V_ThongKe_MatHangThietYeu ORDER BY SLBanRa DESC";
 
             return GetData(query);
 
